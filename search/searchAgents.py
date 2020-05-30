@@ -360,27 +360,41 @@ class CornersProblem(search.SearchProblem):
 
 
 def cornersHeuristic(state, problem):
-    """
-    A heuristic for the CornersProblem that you defined.
+        """
+        A heuristic for the CornersProblem that you defined.
 
-      state:   The current search state
-               (a data structure you chose in your search problem)
+          state:   The current search state
+                   (a data structure you chose in your search problem)
 
-      problem: The CornersProblem instance for this layout.
+          problem: The CornersProblem instance for this layout.
 
-    This function should always return a number that is a lower bound on the
-    shortest path from the state to a goal of the problem; i.e.  it should be
-    admissible (as well as consistent).
-    """
-    corners = problem.corners # These are the corner coordinates
-    walls = problem.walls # These are the walls of the maze, as a Grid (game.py)
+        This function should always return a number that is a lower bound on the
+        shortest path from the state to a goal of the problem; i.e.  it should be
+        admissible (as well as consistent).
+        """
+        corners = problem.corners # These are the corner coordinates
+        #walls = problem.walls # These are the walls of the maze, as a Grid (game.py)
 
-    "*** YOUR CODE HERE ***"
+        "*** YOUR CODE HERE ***"
+        from util import manhattanDistance
 
-    # heuristic = 0
-    # currentPosition = state[0]
-    # visitedCorner = state[1][:]
-    return 0 # Default to trivial solution
+        # Goal state #
+        if problem.isGoalState(state):
+            return 0
+
+        else:
+            distancesFromGoals = [] # Calculate all distances from goals(not visited corners)
+
+            for index,item in enumerate(state[1]):
+                if item == 0: # Not visited corner
+
+                    # Use manhattan method
+                    pacman_pos = state[0]
+                    corner_pos = corners[index]
+                    distancesFromGoals.append(manhattanDistance(pacman_pos,corner_pos))
+
+            # max distance
+            return max(distancesFromGoals)
 
 class AStarCornersAgent(SearchAgent):
     "A SearchAgent for FoodSearchProblem using A* and your foodHeuristic"

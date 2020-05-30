@@ -90,18 +90,19 @@ def depthFirstSearch(problem):
     #util.raiseNotDefined()
 
     space = util.Stack()
+# elements of stack 'space' contains current state/node,
+# actions and cost to get there
     space.push( (problem.getStartState(), [], []) )
+    nodeVisited = []
 
     while not space.isEmpty():
-        curNode, actions, nodeVisited = space.pop()
-
-        if problem.isGoalState(curNode):
-            return actions
-
-        for child, direction, steps in problem.getSuccessors(curNode):
-            if not child in nodeVisited:
-                space.push( (child, actions + [direction], nodeVisited + [curNode]) )
-
+        curNode, actions, curCost = space.pop()
+        if not curNode in nodeVisited:
+            nodeVisited.append(curNode)
+            if problem.isGoalState(curNode):
+                return actions
+            for child, direction, cost in problem.getSuccessors(curNode):
+                space.push( (child, actions + [direction], curCost + [cost]) )
     return []
 
 
@@ -111,20 +112,19 @@ def breadthFirstSearch(problem):
     #util.raiseNotDefined()
 
     space = util.Queue()
+# elements of queue 'space' contains current state/node,
+# actions and cost to get there
     space.push( (problem.getStartState(), [], []) )
-    visited = []
+    nodeVisited = []
 
     while not space.isEmpty():
         curNode, actions, curCost = space.pop()
-        if not curNode in visited:
-            visited.append(curNode)
+        if not curNode in nodeVisited:
+            nodeVisited.append(curNode)
             if problem.isGoalState(curNode):
                 return actions
             for child, direction, cost in problem.getSuccessors(curNode):
-                if not child in visited:
-                    space.push( (child, actions + [direction], curCost + [cost]) )
-
-
+                space.push( (child, actions + [direction], curCost + [cost]) )
     return []
 
 
@@ -133,18 +133,20 @@ def uniformCostSearch(problem):
     "*** YOUR CODE HERE ***"
     #util.raiseNotDefined()
     space = util.PriorityQueue()
+# elements of priorityQueue 'space' contains current state/node,
+# actions and cost to get there
+# priority attribute is cost to the current State
     space.push( (problem.getStartState(), [], 0), 0 )
-    visited = []
+    nodeVisited = []
 
     while not space.isEmpty():
         curNode, actions, curCost = space.pop()
-        if not curNode in visited:
-            visited.append(curNode)
+        if not curNode in nodeVisited:
+            nodeVisited.append(curNode)
             if problem.isGoalState(curNode):
                 return actions
             for child, direction, cost in problem.getSuccessors(curNode):
-                if not child in visited:
-                    space.push( (child, actions + [direction], curCost + cost), curCost + cost )
+                space.push( (child, actions + [direction], curCost + cost), curCost + cost )
 
 
     return []
@@ -161,18 +163,22 @@ def aStarSearch(problem, heuristic=nullHeuristic):
     "*** YOUR CODE HERE ***"
     #util.raiseNotDefined()
     space = util.PriorityQueue()
-    space.push( (problem.getStartState(), [], 0), heuristic(problem.getStartState(), problem) )
-    visited = []
+# elements of priorityQueue 'space' contains current state/node,
+# actions and cost to get there
+# priority attribute is f(n) value = g(n) + h(n)
+# g(n): cost to the current State, h(n): heuristic value of the current state
+    space.push( (problem.getStartState(), [], 0), 0 + heuristic(problem.getStartState(), problem) )
+    nodeVisited = []
 
     while not space.isEmpty():
         curNode, actions, curCost = space.pop()
-        if not curNode in visited:
-            visited.append(curNode)
+        if not curNode in nodeVisited:
+            nodeVisited.append(curNode)
             if problem.isGoalState(curNode):
                 return actions
             for child, direction, cost in problem.getSuccessors(curNode):
-                hVal = curCost + cost
-                space.push( (child, actions + [direction], curCost + cost), hVal + heuristic(child, problem) )
+                gVal = curCost + cost
+                space.push( (child, actions + [direction], gVal), gVal + heuristic(child, problem) )
 
     return []
 
