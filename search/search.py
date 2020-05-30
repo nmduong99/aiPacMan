@@ -96,12 +96,11 @@ def depthFirstSearch(problem):
         curNode, actions, nodeVisited = space.pop()
 
         if problem.isGoalState(curNode):
-            return path
+            return actions
 
         for child, direction, steps in problem.getSuccessors(curNode):
             if not child in nodeVisited:
                 space.push( (child, actions + [direction], nodeVisited + [curNode]) )
-                path = actions + [direction]
 
     return []
 
