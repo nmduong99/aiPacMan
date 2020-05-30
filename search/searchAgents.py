@@ -529,7 +529,13 @@ class ClosestDotSearchAgent(SearchAgent):
         problem = AnyFoodSearchProblem(gameState)
 
         "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+        #util.raiseNotDefined()
+        temp = food.asList()
+
+        from search import breadthFirstSearch
+
+        # Bfs finds closest food first. #
+        return breadthFirstSearch(problem) # Return actions
 
 class AnyFoodSearchProblem(PositionSearchProblem):
     """
@@ -565,7 +571,16 @@ class AnyFoodSearchProblem(PositionSearchProblem):
         x,y = state
 
         "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+        #util.raiseNotDefined()
+         # List of food. List of tuples. Position of every food #
+        foodList = self.food.asList()
+
+        # State reach food #
+        if state in foodList:
+            return True
+        else:
+            return False
+
 
 def mazeDistance(point1, point2, gameState):
     """
